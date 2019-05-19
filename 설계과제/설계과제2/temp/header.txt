@@ -1,0 +1,34 @@
+						printf("헤더 파일 추가!\n");
+						pid_t pid; int status;
+						pid = fork();
+
+						if (pid > 0) {
+							// 부모 프로세스
+#ifdef FINAL
+							sleep(4);
+#endif
+						}
+						else if (pid == 0) {
+							// 자식 프로세스	
+							printf("--------\n");
+							printf("%s\n", r_file_name_in);
+							printf("--------\n");
+							printf("%d %s", after_arr[k], buffer[after_arr[k]]);
+							printf("--------\n");
+							printf("%s\n", r_file_name);
+							printf("--------\n");
+							printf("%d %s\n", k, transfer_buf[k]);
+							for (int kk = header_count-header_count_part; kk < header_count; kk++)
+								printf("추가한 헤더 파일 : %s\n", header_store[kk]);
+#ifdef FINAL
+							sleep(2);
+							system("clear");
+#endif
+							exit(3);
+						}
+						else if (pid == -1) {
+							// 예외 처리
+							perror("fork error\n");
+							exit(0);
+						}
+						while (wait((int *)0) != -1);

@@ -1,0 +1,16 @@
+STUDENT/20190006/12.c: In function ‘ssu_thread_producer’:
+STUDENT/20190006/12.c:18:25: error: ‘cond2’ undeclared (first use in this function); did you mean ‘cond1’?
+    pthread_cond_signal(&cond2);
+                         ^~~~~
+                         cond1
+STUDENT/20190006/12.c:18:25: note: each undeclared identifier is reported only once for each function it appears in
+STUDENT/20190006/12.c: In function ‘ssu_thread_consumer’:
+STUDENT/20190006/12.c:32:23: error: ‘cond2’ undeclared (first use in this function); did you mean ‘cond1’?
+    pthread_cond_wait(&cond2,&mutex);
+                       ^~~~~
+                       cond1
+STUDENT/20190006/12.c: In function ‘main’:
+STUDENT/20190006/12.c:50:24: error: ‘cond2’ undeclared (first use in this function); did you mean ‘cond1’?
+  pthread_cond_destroy(&cond2);
+                        ^~~~~
+                        cond1

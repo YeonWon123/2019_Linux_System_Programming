@@ -1,0 +1,15 @@
+CC = gcc
+OBJECTS = ssu_convert.o
+TARGET = ssu_convert
+
+.SUFFIXES : .c .o
+
+all : $(TARGET)
+
+$(TARGET): $(OBJECTS)
+	$(CC) -o $@ $(OBJECTS)
+
+ssu_convert.o: ssu_runtime.h
+
+clean:
+	rm -f $(OBJECTS) $(TARGETS)

@@ -1,0 +1,4 @@
+((transfer_buf[transfer_line][index_tra] != 'n') ||
+ (transfer_buf[transfer_line][index_tra+1] != 'u') ||
+ (transfer_buf[transfer_line][index_tra+3] != 'l') ||
+ (transfer_buf[transfer_line][index_tra+4] != 'l'))

@@ -1,0 +1,4 @@
+STUDENT/20190004/12.c: In function ‘main’:
+STUDENT/20190004/12.c:69:2: error: expected declaration or statement at end of input
+  exit(0);
+  ^~~~

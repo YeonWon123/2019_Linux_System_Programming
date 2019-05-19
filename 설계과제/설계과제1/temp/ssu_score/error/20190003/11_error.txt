@@ -1,0 +1,6 @@
+STUDENT/20190003/11.c: In function ‘main’:
+STUDENT/20190003/11.c:15:18: error: ‘ssu_signal’ undeclared (first use in this function); did you mean ‘ssignal’?
+  signal(SIGUSR1, ssu_signal);
+                  ^~~~~~~~~~
+                  ssignal
+STUDENT/20190003/11.c:15:18: note: each undeclared identifier is reported only once for each function it appears in

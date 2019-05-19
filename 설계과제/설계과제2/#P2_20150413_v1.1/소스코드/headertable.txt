@@ -1,0 +1,15 @@
+access #include <unistd.h>
+fwrite #include <stdio.h>
+fopen #include <stdio.h>
+fread #include <stdio.h>
+fflush #include <stdio.h>
+fprintf #include <stdio.h>
+fclose #include <stdio.h>
+open #include <sys/types.h> #include <sys/stat.h> #include <fcntl.h>
+read #include <unistd.h>
+write #include <unistd.h>
+close #include <unistd.h>
+exit #include <stdlib.h>
+printf #include <stdio.h>
+scanf #include <stdio.h>
+malloc #include <stdlib.h>

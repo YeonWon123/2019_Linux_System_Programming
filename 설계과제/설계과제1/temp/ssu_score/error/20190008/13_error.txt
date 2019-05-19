@@ -1,0 +1,16 @@
+STUDENT/20190008/13.c: In function ‘ssu_signal_handler’:
+STUDENT/20190008/13.c:8:1: error: parameter ‘count’ is initialized
+ int count = 0;
+ ^~~
+STUDENT/20190008/13.c:11:1: error: expected ‘=’, ‘,’, ‘;’, ‘asm’ or ‘__attribute__’ before ‘{’ token
+ {
+ ^
+STUDENT/20190008/13.c:28:36: error: expected ‘=’, ‘,’, ‘;’, ‘asm’ or ‘__attribute__’ before ‘{’ token
+ void ssu_signal_handler(int signo) {
+                                    ^
+STUDENT/20190008/13.c:6:6: error: old-style parameter declarations in prototyped function definition
+ void ssu_signal_handler(int signo)
+      ^~~~~~~~~~~~~~~~~~
+STUDENT/20190008/13.c:32:1: error: expected ‘{’ at end of input
+ }
+ ^

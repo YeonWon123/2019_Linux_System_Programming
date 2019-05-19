@@ -1,0 +1,217 @@
+// r옵션에서 사용해야 하는 전역 변수와 함수
+char r_buffer_original[3][1024];
+char r_buffer_transfer[3][1024];
+char r_file_name[512];
+int r_line_count_orig = 1;
+int r_line_count_tran = 1;
+char r_file_name_in[512];
+int r_header_index[1000];
+int r_header_index_count = 0;
+
+void r_opt_func_header(int index, char str_buffer_orig[1024], int header_count, int header_size[kkk], char str_buffer_tran[1024][1024]) {
+
+	// r옵션에서 쓰이는 지역변수(예외)
+	int head_count_arr[1024] = {0};
+	int head_count_arr_count = 0;
+	int head_count_arr_index = 0;
+
+// 헤더 변환 - 출력 함수
+void r_opt_func_header(int index, char str_buffer_orig[1024], int header_size, char str_buffer_tran[1024][1024]) {
+
+	strcpy(r_buffer_original[0], "--------\n");
+	strcpy(r_buffer_original[1], r_file_name_in);
+	strcat(r_buffer_original[1], "\n");
+	strcpy(r_buffer_original[2], "--------\n");
+
+	strcpy(r_buffer_transfer[0], "--------\n");
+	strcpy(r_buffer_transfer[1], r_file_name);
+	strcat(r_buffer_transfer[1], "\n");
+	strcpy(r_buffer_transfer[2], "--------\n");
+
+	int status;
+	pid_t pid;
+	pid = fork();
+
+	if (pid > 0) {
+		// 부모 프로세스
+	}
+	else if (pid == 0) {
+		// 자식 프로세스
+		// 원본 출력
+		for (int kk = 0; kk < 3; kk++) {
+			printf("%s", r_buffer_original[kk]);
+		}
+		printf("%d %s", index+1, str_buffer_orig);
+		sleep(1);
+		for (int kk = 0; kk < 3; kk++) {
+			printf("%s", r_buffer_transfer[kk]);
+		}
+
+		printf("헤더 추가 : %s\n", str_buffer_tran[header_size]);
+
+		sleep(1);
+		system("clear");
+		// 자식 프로세스를 죽임
+		exit(3);
+	}
+	else if (pid == -1) {
+		// 예외 처리
+		perror("fork error\n");
+		exit(0);
+	}
+	while (wait((int *)0) != -1);
+}
+
+// 한줄 -> 한줄 변환
+void r_opt_func(int onoff_flag, char str_buffer_orig[1024], char str_buffer_tran[1024]) {
+	// 만약 특정 헤더를 필요로 하는 함수가 등장한다면
+	// 그 원본 코드의 index를 저장해 놓음
+	if (onoff_flag >= 1) {
+		r_header_index[r_header_index_count] = onoff_flag;
+		r_header_index_count++;
+	}
+
+	// 만약 statement를 만나면, onoff_flag = 1이 된다.
+	// 만약 onoff_flag == -1이면, 다음 부분을 r_buffer_orignal과 r_buffer_transfer에 저장한다.
+	// onoff_flag == -1은 stack.c 또는 q2.c가 결정될 때 한다.
+	if (onoff_flag == -1) {
+		strcpy(r_buffer_original[0], "--------\n");
+		strcpy(r_buffer_original[1], r_file_name_in);
+		strcat(r_buffer_original[1], "\n");
+		strcpy(r_buffer_original[2], "--------\n");
+
+		strcpy(r_buffer_transfer[0], "--------\n");
+		strcpy(r_buffer_transfer[1], r_file_name);
+		strcat(r_buffer_transfer[1], "\n");
+		strcpy(r_buffer_transfer[2], "--------\n");
+		return;
+	}
+	else {
+		strcpy(r_buffer_original[0], "--------\n");
+		strcpy(r_buffer_original[1], r_file_name_in);
+		strcat(r_buffer_original[1], "\n");
+		strcpy(r_buffer_original[2], "--------\n");
+
+		// 그렇지 않다면 statement가 있다는 뜻이므로
+		// fork()로 자식 프로세스를 생성하여 Java 언어 프로그램이 변환되는 과정을 보임
+		int status;
+		pid_t pid;
+		pid = fork();
+
+		if (pid > 0) {
+			// 부모 프로세스
+			r_line_count_orig++;
+			if (str_buffer_tran != NULL)
+				r_line_count_tran++;
+			sleep(3);
+		}
+		else if (pid == 0) {
+			// 자식 프로세스
+			// 원본 출력
+			sleep(1);
+			for (int kk = 0; kk < 3; kk++) {
+				printf("%s", r_buffer_original[kk]);
+			}
+			printf("%d %s", r_line_count_orig, str_buffer_orig);
+
+			sleep(1);
+			for (int kk = 0; kk < 3; kk++) {
+				printf("%s", r_buffer_transfer[kk]);
+			}
+
+			if (r_file_name[0] != '\0' && str_buffer_tran != NULL) {
+				printf("%d %s", r_line_count_tran, str_buffer_tran);
+			}
+
+			sleep(1);
+			system("clear");
+			// 자식 프로세스를 죽임
+			exit(3);
+		}
+		else if (pid == -1) {
+			// 예외 처리
+			perror("fork error\n");
+			exit(0);
+		}
+		while (wait((int *)0) != -1);
+	}
+}
+#endif
+
+// 한줄 -> 여러줄 변환
+void r_opt_func_ss(int onoff_flag, char str_buffer_orig[1024], int tran_size, char str_buffer_tran[1024][1024]) {
+	// 만약 특정 헤더를 필요로 하는 함수가 등장한다면
+	// 그 원본 코드의 index를 저장해 놓음
+	if (onoff_flag >= 1) {
+		r_header_index[r_header_index_count] = onoff_flag;
+		r_header_index_count++;
+	}
+
+	// 만약 statement를 만나면, onoff_flag = 1이 된다.
+	// 만약 onoff_flag == -1이면, 다음 부분을 r_buffer_orignal과 r_buffer_transfer에 저장한다.
+	// onoff_flag == -1은 stack.c 또는 q2.c가 결정될 때 한다.
+	if (onoff_flag == -1) {
+		strcpy(r_buffer_original[0], "--------\n");
+		strcpy(r_buffer_original[1], r_file_name_in);
+		strcat(r_buffer_original[1], "\n");
+		strcpy(r_buffer_original[2], "--------\n");
+
+		strcpy(r_buffer_transfer[0], "--------\n");
+		strcpy(r_buffer_transfer[1], r_file_name);
+		strcat(r_buffer_transfer[1], "\n");
+		strcpy(r_buffer_transfer[2], "--------\n");
+		return;
+	}
+	else {
+		strcpy(r_buffer_original[0], "--------\n");
+		strcpy(r_buffer_original[1], r_file_name_in);
+		strcat(r_buffer_original[1], "\n");
+		strcpy(r_buffer_original[2], "--------\n");
+
+		// 그렇지 않다면 statement가 있다는 뜻이므로
+		// fork()로 자식 프로세스를 생성하여 Java 언어 프로그램이 변환되는 과정을 보임
+		int status;
+		pid_t pid;
+		pid = fork();
+
+		if (pid > 0) {
+			// 부모 프로세스
+			r_line_count_orig++;
+			if (str_buffer_tran != NULL)
+				r_line_count_tran++;
+			sleep(3);
+		}
+		else if (pid == 0) {
+			// 자식 프로세스
+			// 원본 출력
+			sleep(1);
+			for (int kk = 0; kk < 3; kk++) {
+				printf("%s", r_buffer_original[kk]);
+			}
+			printf("%d %s", r_line_count_orig, str_buffer_orig);
+
+			sleep(1);
+			for (int kk = 0; kk < 3; kk++) {
+				printf("%s", r_buffer_transfer[kk]);
+			}
+
+			for (int kkk = 0; kkk < tran_size; kkk++) {
+				if (r_file_name[0] != '\0' && str_buffer_tran != NULL) {
+					printf("%d %s", r_line_count_tran, str_buffer_tran[kkk]);
+					r_line_count_tran++;
+				}
+			}
+			sleep(1);
+			system("clear");
+			// 자식 프로세스를 죽임
+			exit(3);
+		}
+		else if (pid == -1) {
+			// 예외 처리
+			perror("fork error\n");
+			exit(0);
+		}
+		while (wait((int *)0) != -1);
+		r_line_count_tran = r_line_count_tran + tran_size - 1;
+	}
+}

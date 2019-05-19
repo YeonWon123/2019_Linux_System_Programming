@@ -1,0 +1,6 @@
+﻿  parsing.c
+d:\3학년 1학기\리시프\설계과제\설계과제1\temp\parsing\parsing.c(12): warning C4273: 'fopen': dll 링크가 일치하지 않습니다.
+  c:\program files (x86)\windows kits\10\include\10.0.17763.0\ucrt\stdio.h(208): note: 'fopen'의 이전 정의를 참조하십시오.
+d:\3학년 1학기\리시프\설계과제\설계과제1\temp\parsing\parsing.c(49): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.17763.0\ucrt\stdio.h(208): note: 'fopen' 선언을 참조하십시오.
+  parsing.vcxproj -> D:\3학년 1학기\리시프\설계과제\설계과제1\temp\parsing\Debug\parsing.exe

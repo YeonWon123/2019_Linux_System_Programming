@@ -1,0 +1,12 @@
+STUDENT/20190009/11.c: In function ‘ssu_signal’:
+STUDENT/20190009/11.c:7:1: error: expected ‘;’ before ‘}’ token
+ }
+ ^
+STUDENT/20190009/11.c: In function ‘main’:
+STUDENT/20190009/11.c:20:7: warning: implicit declaration of function ‘getpid’; did you mean ‘getenv’? [-Wimplicit-function-declaration]
+  kill(getpid(),SIGUSR1);
+       ^~~~~~
+       getenv
+STUDENT/20190009/11.c:23:10: warning: implicit declaration of function ‘fork’ [-Wimplicit-function-declaration]
+  if((pid=fork()) < 0){
+          ^~~~

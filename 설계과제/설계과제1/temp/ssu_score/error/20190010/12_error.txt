@@ -1,0 +1,8 @@
+STUDENT/20190010/12.c: In function ‘ssu_thread_consumer’:
+STUDENT/20190010/12.c:31:6: error: ‘i’ undeclared (first use in this function)
+  for(i = 1; i <= 300; i++) {
+      ^
+STUDENT/20190010/12.c:31:6: note: each undeclared identifier is reported only once for each function it appears in
+STUDENT/20190010/12.c:37:3: error: ‘sum’ undeclared (first use in this function)
+   sum += buf[--length];
+   ^~~

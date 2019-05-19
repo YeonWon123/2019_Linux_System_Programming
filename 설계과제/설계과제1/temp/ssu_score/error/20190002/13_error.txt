@@ -1,0 +1,4 @@
+STUDENT/20190002/13.c: In function ‘main’:
+STUDENT/20190002/13.c:12:18: error: storage size of ‘sig_act’ isn’t known
+  struct sigacion sig_act;
+                  ^~~~~~~
