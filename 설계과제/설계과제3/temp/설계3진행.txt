@@ -1,0 +1,190 @@
+ 27 // 백업 리스트 - 링크드 리스트로 구현
+ 28 typedef struct BACKUP_LIST {
+ 29         struct BACKUP_LIST *next;
+ 30         pthread_t tid;
+ 31         char filename[242];     // 파일의 절대경로, 크기는 255-13 (_YYMMDDHHMMSS부분 제외)
+ 32         int period;             // 파일의 백업 주기
+ 33         char option[10];        // 옵션 (m,n,t..)
+ 34 } backup_list;
+ 35 
+ 36 // 백업 리스트의 헤더와 테일 - 링크드 리스트로 구현
+ 37 backup_list *HEAD = NULL, *TAIL = NULL;
+
+ 20 // 전역변수
+ 21 // 동시에 여러 개의 파일에 대해 백업이 수행되어야 하기 때문에 메시지 출력 시 반드시 mutex를 사용하여 동기화
+ 22 pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
+ 23 int startfile_fin = 0;
+ 24 int dir_cnt = 0;
+ 25 bool isnewfile = false;
+ 26 char backup_dir[255];
+
+216                 // add 명령 - add <filename> [PERIOD] [OPTION]
+217                 // <filename>이 없을 시 에러 단 d옵션은 예외
+218                 // [PERIOD] : 5,6,7,8,9,10의 정수형만 허용, 실수형 입력 시 에러 처리 후 프롬포트로 제어 넘김
+219                 // [OPTION] : -m, -n NUMBER, -t TIME, -d DIRECTORY
+
+442 // 현재 백업 실행중인 모든 백업 리스트 출력
+443 // 한 줄에 한 개 파일의 절대경로, PERIOD, OPTION 출력
+444 void list()
+445 {
+446         backup_list *cur;
+447         for (cur = HEAD; cur != NULL; cur = cur->next) {
+448                 printf("%s, %d, %s\n", cur->filename, cur->period, cur->option);
+449         }
+450         return;
+451 }
+
+
+247                 // remove 명령 - remove <FILENAME> [OPTION]
+248                 // <filename>이 없을 시 에러 단 a옵션은 예외
+249                 // [OPTION] : -a
+
+269                 // recover 명령 - recover <FILENAME> [OPTION]
+270                 // [OPTION] : -n <NEWFILE>
+
+ 58 // 백업 리스트에서 파일을 검색하는 함수, 파일이 있으면 0을 리턴하고, 파일이 없으면 -1을 리턴한다.
+ 59 int search_list(char *filename) {
+ 60         backup_list *cur;
+ 61         for (cur = HEAD; cur != NULL; cur = cur->next) {
+ 62                 if (strcmp(cur->filename, filename) == 0)
+ 63                         return 0;
+ 64         }
+ 65         return -1;
+ 66 }
+ 67 
+ 68 // 백업 리스트를 초기화하는 함수
+ 69 void default_list() {
+ 70 
+ 71 }
+
+547                 backup_list *cur;
+548                 while (HEAD != NULL) {
+549                         cur = HEAD;
+550                         HEAD = HEAD->next;
+551                         free(cur);
+552                 }
+555                 HEAD = NULL, TAIL = NULL;
+
+
+372         // 단 이때 filename은 절대경로
+373         char filename[1024];
+374         // 만약 <filename> 이 상대경로일 경우 절대경로를 filename에 저장
+375         if (token[1][0] != '/') {
+376                 getcwd(filename, 1024);
+377                 strcat(filename, "/");
+378                 strcat(filename, token[1]);
+379         }
+380         else {
+381                 // 절대경로이면 그냥 filename에 저장
+382                 strcpy(filename, token[1]);
+383         }
+
+ 58 // 상대경로를 절대경로로 변환하여 주는 함수
+ 59 void rpath_to_fpath(char *r_path, char *f_path) {
+ 60         if (r_path[1][0] != '/') {
+ 61                 getcwd(filename, 1024);
+ 62                 strcat(filename, "/");
+ 63                 strcat(filename, r_path);
+ 64         }
+ 65         else {
+ 66                 strcpy(f_path, r_path);
+ 67         }
+ 68 }
+
+typedef struct _add_option {
+	char opt_print[10]; // m,n,d
+	int m_flag;
+
+	int n_flag;
+	int n_number;
+
+	int t_flag;
+	int t_time;
+
+	int d_flag;
+	char d_directory[1024];
+} add_option;
+
+filename - 절대경로, token[2] - period, struct option data;
+
+123 
+124 // 백업 리스트에 새로 추가하는 함수, 쓰레드를 하나 생성하는 함수
+125 backup_list *make_backup_list(char filename[242], int period, char option[10]) {
+126         backup_list *temp = (backup_list *)malloc(sizeof(backup_list));
+127         // 절대경로 입력
+128         strcpy(temp->f_filename, filename);
+129 
+130         // 파일이름 입력(절대경로에서 추출)
+131         int k;
+132         for (k = strlen(temp->f_filename) - 1; k >= 0; k--) {
+133                 if (name[k] == '/')
+134                         break;
+135         }
+136         k++;
+137         char p_filename[300];
+138         for (int i = k; i < strlen(temp->f_filename) - 1; i++) {
+139                 p_filename[i-k] = temp->f_filename[i];
+140         }
+141         strcpy(temp->p_filename, p_filename);
+142 
+143         // period 입력
+144         temp->period = period;
+145 
+146         // option 입력 (이미 추출됨)
+147         strcpy(temp->option, option);
+148         temp->next = NULL;
+149 
+150         // 쓰레드 생성!
+151         if (pthread_create(&(temp->tid), NULL, (void *)(&thread_function), (void *)filename) != 0) {
+152                 fprintf(stderr, "pthread_create error\n");
+153         }
+154         return temp;
+155 }
+156 
+
+
+ 28 // add 옵션 구조체 - 옵션 정보 보관용
+ 29 typedef struct ADD_OPTION {
+ 30         char opt_print[10]; // ex) m,n,t,d
+ 31  
+ 32         int m_flag; // m옵션이면 1, 아니면 0
+ 33  
+ 34         int n_flag; // n옵션이면 1, 아니면 0
+ 35         int n_number; // n_number 저장
+ 36 
+ 37         int t_flag; // t옵션이면 1, 아니면 0
+ 38         int t_time; // t_time 저장
+ 39 
+ 40         int d_flag; // d옵션이면 1, 아니면 0
+ 41         char d_directory[1024]; // d_directory 저장
+ 42 } add_option;
+ 43 
+ 44 // 백업 리스트 - 링크드 리스트로 구현
+ 45 typedef struct BACKUP_LIST {
+ 46         struct BACKUP_LIST *next;
+ 47         pthread_t tid;
+ 48         char f_filename[242];   // 파일의 절대경로, 크기는 255-13 (_YYMMDDHHMMSS부분 제외)
+ 49         char p_filename[242];   // 파일 이름, 파일 이름은 [파일이름_시간]으로 작성하며, 이때 파일이름 부분에 해당, 따라서 크기는 최대 255-13
+ 50         int period;             // 파일의 백업 주기
+ 51         add_option opt_data;    // 옵션 정보 보관
+ 52 } backup_list;
+ 53 
+ 54 // 백업 리스트의 헤더와 테일 - 링크드 리스트로 구현
+ 55 backup_list *HEAD = NULL, *TAIL = NULL;
+
+
+  60 // 함수 원형
+  61 void rpath_to_fpath(char *r_path, char *f_path);
+  62 void thread_function(void *arg);
+  63 void backup_function(backup_list *data);
+  64 void print_log(char *name, int index);
+  65 time_t change_time(char *time);
+  66 void directory_search(char *directory, backup_list temp);
+  67 int search_list(char *filename);
+  68 void delete_list(char *filename);
+  69 void default_list();
+  70 backup_list *make_backup_list(char filename[242], int period, add_option opt_data);
+  71 void thread_function(void *arg);
+  72 void backup_function(backup_list *data);
+  73 void print_log(char *name, int index);
+  74 

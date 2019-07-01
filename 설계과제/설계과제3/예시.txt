@@ -1,0 +1,40 @@
+// 백업 리스트
+typedef struct BACKUP_LIST {
+	struct BACKUP_LIST *next;
+	pthread_t tid;
+	char filename[242]; // 파일의 절대경로, 크기는 255 - 13 (_YYMMDDHHMMSS 제외)
+	int period; // 파일의 백업 주기
+	char option[10]; // 옵션 (n,m,t등등...)
+
+} backup_list;
+
+backup_list *make_backup_list(char filename[242], int period, char option[10]) {
+	backup_list *temp = (backup_list *)malloc(sizeof(backup_list));
+	strcpy(temp->filename, filename);
+	temp->period = period;
+	strcpy(temp->option, option);
+	temp->next = NULL;
+
+	if (pthread_create(&temp->tid), NULL, (void *)(&thread_function), (void *)data) != 0) {
+		fprintf(stderr, "pthread_create error\n");
+	}
+	return temp;
+}
+
+void thread_function(void *arg) {
+	char *data = (char *)arg;
+	backup_function(data);
+}
+
+void backup_function(char *filename) {
+	struct stat src_sc;
+	time_t old = 0, new = 0;
+	int i = 0;
+	int check = 0;
+
+	while (1) {
+		stat(name, &src_sc);
+		new = 	
+	}
+}
+

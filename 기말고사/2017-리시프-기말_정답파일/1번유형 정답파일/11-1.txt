@@ -1,0 +1,1 @@
+shared_memory_id = shmget(key, SHARED_MEMORY_SIZE, 0644 | IPC_CREAT)

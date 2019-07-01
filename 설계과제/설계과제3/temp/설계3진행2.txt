@@ -1,0 +1,44 @@
+* 로그파일, 백업 디렉토리의 이름은 자유
+
+2.에 의해 백업 파일의 이름은 [파일이름_시간]임
+3.에 의해 로그파일에는 "원본 파일의" 절대경로를 넣어야 함
+
+따라서 added 로그파일에는 원본 파일의 절대경로를 넣고
+generated 로그파일에는 4.에 의해 생성된 파일의 절대경로를 입력하면 될듯
+
+만약 
+원본 		: /home/kyg/lsp_p3/test1.txt
+백업 디렉토리 	: /home/ssu_backup/hi_lsp 	일 경우
+
+백업 : /home/ssu_backup/hi_lsp/test1.txt_190311153320 이 된다.
+이때 로그파일은 다음과 같다.
+
+
+[190311 153320] /home/kyg/lsp_p3/test1.txt added
+[190311 153325] /home/ssu_backup/a/test1.txt_190311153325 generated
+[190311 153330] /home/ssu_backup/a/test1.txt_190311153330 generated
+
+[190311 153349] /home/kyg/lsp_p3/test1.txt deleted
+[190311 154450] /home/kyg/lsp_p3/test1.txt recovered
+
+ 28 // 백업 리스트 - 링크드 리스트로 구현
+ 29 typedef struct BACKUP_LIST {
+ 30         struct BACKUP_LIST *next;
+ 31         pthread_t tid;
+ 32         char f_filename[242];   // 파일의 절대경로, 크기는 255-13 (_YYMMDDHHMMSS부분 제외)
+ 33         char p_filename[242];   // 파일 이름(경로 제외)
+ 34         int period;             // 파일의 백업 주기
+ 35         char option[10];        // 옵션 (m,n,t..)
+ 36 } backup_list;
+
+
+ 20 // 전역변수
+ 21 // 동시에 여러 개의 파일에 대해 백업이 수행되어야 하기 때문에 메시지 출력 시 반드시 mutex를 사용하여 동기화
+ 22 pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
+ 23 int startfile_fin = 0;
+ 24 int dir_cnt = 0;
+ 25 bool isnewfile = false;
+ 26 char backup_dir[255];           // 백업할 경로
+ 27 char backup_log_file[255];      // 백업 로그 파일 이름
+ 28 FILE *fp_log_file;              // 로그 파일 FILE 포인터 변수
+ 29 

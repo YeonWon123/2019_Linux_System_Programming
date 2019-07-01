@@ -1,0 +1,1 @@
+open("/dev/null", O_RDWR)

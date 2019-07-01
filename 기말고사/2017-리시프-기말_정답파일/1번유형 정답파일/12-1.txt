@@ -1,0 +1,1 @@
+lock.l_whence = 0

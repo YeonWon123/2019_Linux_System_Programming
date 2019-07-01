@@ -1,0 +1,1 @@
+msgctl(msg_queueid, IPC_RMID, NULL)

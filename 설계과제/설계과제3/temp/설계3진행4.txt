@@ -1,0 +1,25 @@
+1187         // stat 구조체 선언
+1188         struct stat statbuf1, statbuf2;
+1189         if (lstat(token[1], &statbuf1) < 0) {
+1190                 fprintf(stderr, "lstat error for %s\n", token[1]);
+1191                 return;
+1192         }
+1193 
+1194         if (lstat(token[2], &statbuf2) < 0) {
+1195                 fprintf(stderr, "lstat error for %s\n", token[2]);
+1196                 return;
+1197         }
+
+
+printf("%s's mtime : %ld, file size : %ld bytes\n", token[1], statbuf1.st_mtime, statbuf1.st_size);
+printf("%s's mtime : %ld, file size : %ld bytes\n", token[2], statbuf2.st_mtime, statbuf2.st_size);
+
+1278         char filename[1024]; -> 원본 파일
+1321         char f_filename[255]; -> 백업할 파일 대상
+
+1230         char n_filename[242]; -> 새로 백업할 파일 이름, n옵션이 있을 시 작동
+
+
+1.txt_190601035402
+
+thisisthelastfileandthisisveryverynotgoodatthisfilesystemandfilenamebecausetheyhave255thousandfilenameandthisisnotfile

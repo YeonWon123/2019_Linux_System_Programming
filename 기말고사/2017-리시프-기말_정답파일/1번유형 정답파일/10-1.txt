@@ -1,0 +1,1 @@
+msg_queueid = msgget(key, 0644 | IPC_CREAT)
